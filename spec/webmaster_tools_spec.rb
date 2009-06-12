@@ -9,7 +9,7 @@ context GData::WebmasterTools do
       xml = File.read(File.dirname(__FILE__) + '/fixtures/webmaster_tools/sites.xml')
       
       @wt = GData::WebmasterTools.new
-      @wt.should_receive(:get).with('/webmasters/tools/feeds/sites/').and_return([nil, xml])
+      @wt.should_receive(:http_get).with('/webmasters/tools/feeds/sites/').and_return([nil, xml])
       @wt.should_receive(:authenticated?).and_return(true)
     end
     
@@ -37,7 +37,7 @@ context GData::WebmasterTools do
       xml = File.read(File.dirname(__FILE__) + '/fixtures/webmaster_tools/site.xml')
       
       @wt = GData::WebmasterTools.new
-      @wt.should_receive(:get).and_return([nil, xml])
+      @wt.should_receive(:http_get).and_return([nil, xml])
       @wt.should_receive(:authenticated?).and_return(true)
     end
     
@@ -57,7 +57,7 @@ context GData::WebmasterTools do
       xml = File.read(File.dirname(__FILE__) + '/fixtures/webmaster_tools/add_site.xml')
       
       @wt = GData::WebmasterTools.new
-      @wt.should_receive(:post).and_return([Net::HTTPCreated.new(nil, nil, nil), xml])
+      @wt.should_receive(:http_post).and_return([Net::HTTPCreated.new(nil, nil, nil), xml])
       @wt.should_receive(:authenticated?).and_return(true)
     end
     
@@ -79,7 +79,7 @@ context GData::WebmasterTools do
     end
     
     it 'should return true if verification succeeds' do
-      @wt.should_receive(:put).and_return([Net::HTTPOK.new(nil, nil, nil), @xml])
+      @wt.should_receive(:http_put).and_return([Net::HTTPOK.new(nil, nil, nil), @xml])
       @wt.should_receive(:authenticated?).and_return(true)
       @wt.verify_site('http://www.mysite.com/', 'metatag').should be_true
     end
@@ -91,7 +91,7 @@ context GData::WebmasterTools do
     end
     
     it 'should raise site not found error if account does not have this site' do
-      @wt.should_receive(:put).and_return([Net::HTTPNotFound.new(nil, nil, nil), ''])
+      @wt.should_receive(:http_put).and_return([Net::HTTPNotFound.new(nil, nil, nil), ''])
       @wt.should_receive(:authenticated?).and_return(true)
       lambda {
         @wt.verify_site('http://www.unknownsite.com', 'metatag')

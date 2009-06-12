@@ -36,7 +36,7 @@ module GData #:nodoc:
     # Each element in returned array contains hash with site data. See more at parse_site_entry.
     def sites
       if authenticated?
-        response, data = get(FEED_URL)
+        response, data = http_get(FEED_URL)
 
         site_data = Array.new
         REXML::Document.new(data).root.elements.each('entry') do |e|
@@ -60,7 +60,7 @@ module GData #:nodoc:
     # Returned hash contains site data parsed with parse_site_entry method.
     def site(site_id)
       if authenticated?
-        response, data = get site_feed(site_id)
+        response, data = http_get site_feed(site_id)
         entry = REXML::Document.new(data).root.elements['entry']
         parse_site_entry(entry)
       else
@@ -81,7 +81,7 @@ module GData #:nodoc:
     def add_site(url)
       if authenticated?
         content = '<entry xmlns="http://www.w3.org/2005/Atom"><content src="' + url +'" /></entry>'
-        response, data = post(FEED_URL, content)
+        response, data = http_post(FEED_URL, content)
         
         case response
         when Net::HTTPCreated
@@ -100,7 +100,7 @@ module GData #:nodoc:
     # Remove site from account.
     def delete_site(site_id)
       if authenticated?
-        response, data = delete site_feed(site_id)
+        response, data = http_delete site_feed(site_id)
         
         case response
         when Net::HTTPOK
@@ -126,7 +126,7 @@ module GData #:nodoc:
         content << '<id>' + site_id + '</id><category scheme="http://schemas.google.com/g/2005#kind" term="http://schemas.google.com/webmasters/tools/2007#site-info"/>'
         content << '<wt:verification-method type="' + method + '" in-use="true"/>'
         content << '</entry>'
-        response, data = put(site_feed(site_id), content)
+        response, data = http_put(site_feed(site_id), content)
         
         case response
         when Net::HTTPOK

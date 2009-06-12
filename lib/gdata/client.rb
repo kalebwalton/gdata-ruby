@@ -123,22 +123,22 @@ module GData
 
     # Sends an HTTP GET request to the url specified in the instantiation of
     # the class.
-    def get(path)
+    def http_get(path)
       response, data = @url.get(path, @headers)
     end
     
-    alias request get # for compatibility purposes.
+    alias request http_get # for compatibility purposes.
     
     # Sends an HTTP POST request to the url specified in the instantiation of
     # the class.
-    def post(path, entry)
+    def http_post(path, entry)
       @url.post(path, entry, @headers)
     end
     
     # Sends an HTTP PUT request to... you get the idea.
     # It contains the 'X-HTTP-Method-Override' line because there are times
     # that firewalls don't play nice with the HTTP PUT request.
-    def put(path,entry)
+    def http_put(path,entry)
       h = @headers.clone
       h['X-HTTP-Method-Override'] = 'PUT'
       @url.put(path, entry, h)
@@ -146,7 +146,7 @@ module GData
     
     # Sends an HTTP DELETE request
     # 'X-HTTP-Method-Override' exists for the same reason as above.
-    def delete(path)
+    def http_delete(path)
       h = @headers.clone
       h['X-HTTP-Method-Override'] = 'DELETE'
       @url.delete(path, h)

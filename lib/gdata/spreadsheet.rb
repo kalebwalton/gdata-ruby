@@ -19,7 +19,7 @@ module GData
     def save_entry(entry)
       path = "/feeds/cells/#{@spreadsheet_id}/1/#{@headers ? 'private' : 'public'}/full"
 
-      post(path, entry)
+      http_post(path, entry)
     end
 
     def entry(formula, row=1, col=1)

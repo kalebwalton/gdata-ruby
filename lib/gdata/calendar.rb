@@ -22,7 +22,7 @@ module GData
     CAL_PATH = "/calendar/feeds/default/allcalendars/full?gsessionid=#{@gsessionid}"
     def retrieve_calendar_list
     	if authenticated?
-          cal_feed = get('calendar/feeds/default/allcalendars/full')
+          cal_feed = http_get('calendar/feeds/default/allcalendars/full')
 	  @gsessionid = cal_feed[0].get_fields("location")[0].split("gsessionid").last
 	  cal_feed = get(cal_feed[0].get_fields("location"))
 	  return cal_feed
